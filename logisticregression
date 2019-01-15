@@ -1,0 +1,19 @@
+dpen<- read.csv("~/Desktop/Class/Analytical modeling/4-1-DeathPenalty.csv")
+ml=glm(Death~VRace+Agg, family=binomial,data=dpen)
+ml
+
+exp(ml$coef[2])
+exp(ml$coef[3])
+exp(ml$coef[1])
+
+fitBlack=dim(501)
+fitWhite=dim(501)
+ag=dim(501)
+
+for (i in 1:501){ag[i]=(99+i)/100
+fitBlack[i]=exp(ml$coef[1]+ag[i]*ml$coef[3])/(1+exp(ml$coef[1]+ag[i]*ml$coef[3]))
+fitWhite[i]=exp(ml$coef[1]+ml$coef[2]+ag[i]*ml$coef[3])/(1+exp(ml$coef[1]+ml$coef[2]+ag[i]*ml$coef[3]))}
+
+plot(fitBlack~ag,type="l",col="black",ylab="Prob[Death]",xlab="Aggravation",ylim=c(0,1),main="red line for white victim;black line for black victim")
+
+points(fitWhite~ag,type="l",col="red")
